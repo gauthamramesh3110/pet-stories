@@ -2,7 +2,7 @@
   <v-container class="mt-10">
     <v-row>
       <v-col xs="12" md="6">
-        <v-carousel height="300" cycle show-arrows-on-hover>
+        <v-carousel cycle height="300" show-arrows-on-hover>
           <v-carousel-item v-for="slidePath in carouselImages" :key="slidePath" :src="slidePath"></v-carousel-item>
         </v-carousel>
       </v-col>
