@@ -2,8 +2,21 @@
   <v-card class="mx-2 mt-11 mb-1">
     <v-toolbar color="primary dark">
       <v-tabs dark>
-          <v-tab v-for="(service,index) in services" :key="index">{{service}}</v-tab>
+        <v-tab v-for="(serviceType,index) in serviceTypes" :key="index">{{serviceType}}</v-tab>
       </v-tabs>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn color="#00000000" dark v-on="on" depressed v-model="currentCity">
+            <v-icon left small>fas fa-map-marker-alt</v-icon>
+            {{currentCity ? currentCity : 'Select a City'}}
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(city, index) in cities" :key="index" @click="setCity(city)">
+            <v-list-item-title>{{city}}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-toolbar>
     <v-container class="overflow-y-auto" style="max-height: 75vh" fluid>
       <v-row>
@@ -40,26 +53,35 @@
 <script>
 export default {
   name: "List",
+  methods: {
+    setCity(city) {
+      this.currentCity = city;
+    }
+  },
   data: () => ({
-    services: ["Groomers", "Vetenarians", "Pet Sitters"],
+    currentCity: null,
+    serviceTypes: ["Groomers", "Vetenarians", "Pet Sitters"],
     cities: ["Chennai", "Mumbai", "Kolkata"],
     groomers: [
       {
         id: 1,
-        image: "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-1.jpg?alt=media&token=651215ed-5b84-401e-844b-77908f8b4270",
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-1.jpg?alt=media&token=651215ed-5b84-401e-844b-77908f8b4270",
         title: "Ultimate Vignesh Groomers",
         address: "Kolathur, Kolathur Nagar, Kolathur District, Kolathur-69",
         services: [
           "Hair Trimming",
           "Nail Clipping",
           "Dry Cleaning",
-          "Shampoo Wash"
+          "Shampoo Wash",
+          "Nipple Wash"
         ],
         rating: 4.0
       },
       {
         id: 2,
-        image: "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-2.jpg?alt=media&token=2264cb7e-3f47-4a26-930d-36b7879ecaa8",
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-2.jpg?alt=media&token=2264cb7e-3f47-4a26-930d-36b7879ecaa8",
         title: "LGBT Gau Groomers",
         address: "Saligramam, Saligramam Nagar, Gramam District, Gramoor-69",
         services: [
@@ -73,7 +95,8 @@ export default {
       },
       {
         id: 3,
-        image: "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-3.jpg?alt=media&token=161c6a48-7d9d-4301-8a36-57ce592ed544",
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-3.jpg?alt=media&token=161c6a48-7d9d-4301-8a36-57ce592ed544",
         title: "Marvelous Shailu Groomers",
         address: "Nanganallur, Joilu Nagar, Joilupakkam District, Joilu-69",
         services: [
@@ -86,7 +109,8 @@ export default {
       },
       {
         id: 4,
-        image: "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-4.jpg?alt=media&token=fd009919-e828-41ce-842f-f8139996a589",
+        image:
+          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-4.jpg?alt=media&token=fd009919-e828-41ce-842f-f8139996a589",
         title: "Sneg Groomers",
         address: "Golathur, Golathur Nagar, Golathur District, Golathur-69",
         services: [
