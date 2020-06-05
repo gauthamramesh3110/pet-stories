@@ -1,17 +1,15 @@
 <template>
-  <v-card class="ma-6">
+  <v-card class="mx-2 mt-11 mb-1">
     <v-toolbar color="primary dark">
-      <v-btn-toggle>
-        <v-btn>Grooming</v-btn>
-        <v-btn>Vetenarians</v-btn>
-        <v-btn>Pet Sitters</v-btn>
-      </v-btn-toggle>
+      <v-tabs dark>
+          <v-tab v-for="(service,index) in services" :key="index">{{service}}</v-tab>
+      </v-tabs>
     </v-toolbar>
-    <v-container class="overflow-y-auto" style="max-height: 70vh" fluid>
+    <v-container class="overflow-y-auto" style="max-height: 75vh" fluid>
       <v-row>
-        <v-col cols="6" md="4" v-for="(groomer, index) in groomers" :key="index">
+        <v-col cols="12" md="3" v-for="(groomer, index) in groomers" :key="index">
           <v-card>
-            <v-img :src="groomer.image"></v-img>
+            <v-img :src="groomer.image" :aspect-ratio="16/9"></v-img>
             <v-card-title>{{groomer.title}}</v-card-title>
             <v-card-text>
               <v-rating
@@ -30,7 +28,7 @@
               </ul>
             </v-card-text>
             <v-card-actions>
-              <v-btn class="accent">Book Appointment</v-btn>
+              <v-btn color="secondary dark">Book Appointment</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -43,6 +41,7 @@
 export default {
   name: "List",
   data: () => ({
+    services: ["Groomers", "Vetenarians", "Pet Sitters"],
     cities: ["Chennai", "Mumbai", "Kolkata"],
     groomers: [
       {
