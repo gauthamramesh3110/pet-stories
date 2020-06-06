@@ -1,127 +1,77 @@
 <template>
   <v-card class="mx-2 mt-11 mb-1">
     <v-toolbar color="primary dark">
-      <v-tabs dark>
-        <v-tab v-for="(serviceType,index) in serviceTypes" :key="index">{{serviceType}}</v-tab>
-      </v-tabs>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn color="#00000000" dark v-on="on" depressed v-model="currentCity">
-            <v-icon left small>fas fa-map-marker-alt</v-icon>
-            {{currentCity ? currentCity : 'Select a City'}}
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(city, index) in cities" :key="index" @click="setCity(city)">
-            <v-list-item-title>{{city}}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-container fluid>
+        <v-row no-gutters align="center">
+          <v-col cols="6" v-if="$vuetify.breakpoint.smAndUp">
+            <v-btn-toggle background-color="#00000000" dark mandatory borderless v-model="tab">
+              <v-btn
+                color="#4D4D4D4D"
+                depressed
+                v-for="(serviceType,index) in serviceTypes"
+                :key="index"
+              >{{serviceType}}</v-btn>
+            </v-btn-toggle>
+          </v-col>
+          <v-col cols="6" v-if="$vuetify.breakpoint.xsOnly">
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn color="#4D4D4D4D" dark v-on="on" depressed >
+                  <v-icon small class="mr-3">fas fa-caret-down</v-icon>
+                  {{serviceTypes[tab]}}
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item  v-for="(serviceType,index) in serviceTypes" :key="index" @click="tab=index">
+                  <v-list-item-title>{{serviceType}}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+          <v-col cols="6" class="d-flex justify-end">
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn color="#00000000" dark v-on="on" depressed v-model="currentCity">
+                  <v-icon left small>fas fa-map-marker-alt</v-icon>
+                  {{currentCity}}
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-for="(city, index) in cities" :key="index" @click="currentCity=city">
+                  <v-list-item-title>{{city}}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-toolbar>
-    <v-container class="overflow-y-auto" style="max-height: 75vh" fluid>
-      <v-row>
-        <v-col cols="12" md="3" v-for="(groomer, index) in groomers" :key="index">
-          <v-card>
-            <v-img :src="groomer.image" :aspect-ratio="16/9"></v-img>
-            <v-card-title>{{groomer.title}}</v-card-title>
-            <v-card-text>
-              <v-rating
-                :value="groomer.rating"
-                color="orange"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-            </v-card-text>
-            <v-card-subtitle>{{groomer.address}}</v-card-subtitle>
-            <v-card-text>
-              <ul v-for="(service, index) in groomer.services" :key="index" dense>
-                <li>{{service}}</li>
-              </ul>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="secondary dark">Book Appointment</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-window v-model="tab">
+      <v-window-item>
+        <Groomers />
+      </v-window-item>
+      <v-window-item>Vetenarians</v-window-item>
+      <v-window-item>Pet Sitters</v-window-item>
+    </v-window>
   </v-card>
 </template>
 
 <script>
+import Groomers from "./Groomers";
+
 export default {
   name: "List",
+  components: {
+    Groomers
+  },
   methods: {
-    setCity(city) {
-      this.currentCity = city;
-    }
+
   },
   data: () => ({
-    currentCity: null,
+    tab: 0,
+    currentCity: "Select a City",
     serviceTypes: ["Groomers", "Vetenarians", "Pet Sitters"],
-    cities: ["Chennai", "Mumbai", "Kolkata"],
-    groomers: [
-      {
-        id: 1,
-        image:
-          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-1.jpg?alt=media&token=651215ed-5b84-401e-844b-77908f8b4270",
-        title: "Ultimate Vignesh Groomers",
-        address: "Kolathur, Kolathur Nagar, Kolathur District, Kolathur-69",
-        services: [
-          "Hair Trimming",
-          "Nail Clipping",
-          "Dry Cleaning",
-          "Shampoo Wash",
-          "Nipple Wash"
-        ],
-        rating: 4.0
-      },
-      {
-        id: 2,
-        image:
-          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-2.jpg?alt=media&token=2264cb7e-3f47-4a26-930d-36b7879ecaa8",
-        title: "LGBT Gau Groomers",
-        address: "Saligramam, Saligramam Nagar, Gramam District, Gramoor-69",
-        services: [
-          "Hair Trimming",
-          "Nail Clipping",
-          "Dry Cleaning",
-          "Shampoo Wash",
-          "Dog Tikka"
-        ],
-        rating: 4.0
-      },
-      {
-        id: 3,
-        image:
-          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-3.jpg?alt=media&token=161c6a48-7d9d-4301-8a36-57ce592ed544",
-        title: "Marvelous Shailu Groomers",
-        address: "Nanganallur, Joilu Nagar, Joilupakkam District, Joilu-69",
-        services: [
-          "Hair Trimming",
-          "Nail Clipping",
-          "Dry Cleaning",
-          "Shampoo Wash"
-        ],
-        rating: 4.0
-      },
-      {
-        id: 4,
-        image:
-          "https://firebasestorage.googleapis.com/v0/b/pet-stories-493e1.appspot.com/o/groomer-assets%2Fgroomer-4.jpg?alt=media&token=fd009919-e828-41ce-842f-f8139996a589",
-        title: "Sneg Groomers",
-        address: "Golathur, Golathur Nagar, Golathur District, Golathur-69",
-        services: [
-          "Hair Trimming",
-          "Nail Clipping",
-          "Dry Cleaning",
-          "Shampoo Wash"
-        ],
-        rating: 4.0
-      }
-    ]
+    cities: ["Chennai", "Mumbai", "Kolkata"]
   })
 };
 </script>
